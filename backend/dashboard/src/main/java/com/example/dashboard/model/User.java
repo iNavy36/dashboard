@@ -1,11 +1,8 @@
 package com.example.dashboard.model;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import java.util.List;
+
+import jakarta.persistence.*;
 
 @Entity
 @Table(name = "users")
@@ -20,6 +17,9 @@ public class User {
 
     @Column(name = "user_email", unique = true)
     private String email;
+
+    @OneToMany(mappedBy = "userEntity", targetEntity = Card.class, cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<Card> cards;
 
     public User() {
     }
@@ -47,5 +47,9 @@ public class User {
 
     public Long getId() {
         return id;
+    }
+
+    public List<Card> getCards() {
+        return cards;
     }
 }

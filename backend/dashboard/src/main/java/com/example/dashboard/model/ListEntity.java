@@ -2,17 +2,7 @@ package com.example.dashboard.model;
 
 import java.util.List;
 
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToMany;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 
 @Entity
 @Table(name = "lists")
@@ -29,14 +19,15 @@ public class ListEntity {
     @JoinColumn(name = "board_id", nullable = false)
     private Board boardEntity;
 
-    @OneToMany(mappedBy = "listEntity", targetEntity = Card.class, cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "listEntity", targetEntity = Card.class, cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Card> cards;
 
     public ListEntity() {
     }
 
-    public ListEntity(String name) {
+    public ListEntity(String name, Board boardEntity) {
         this.name = name;
+        this.boardEntity = boardEntity;
     }
 
     public String getName() {

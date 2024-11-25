@@ -1,13 +1,6 @@
 package com.example.dashboard.model;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 
 @Entity
 @Table(name = "cards")
@@ -31,8 +24,10 @@ public class Card {
     public Card() {
     }
 
-    public Card(String content) {
+    public Card(String content, User userEntity, ListEntity listEntity) {
         this.content = content;
+        this.userEntity = userEntity;
+        this.listEntity = listEntity;
     }
 
     public String getContent() {
@@ -54,4 +49,13 @@ public class Card {
     public User getUserEntity() {
         return userEntity;
     }
+
+    public void setListEntity(ListEntity listEntity) {
+        this.listEntity = listEntity;
+    }
+
+    public void setUserEntity(User userEntity) {
+        this.userEntity = userEntity;
+    }
+
 }
