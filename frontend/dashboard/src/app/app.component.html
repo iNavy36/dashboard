@@ -1,0 +1,10 @@
+<div>
+  <app-user-dropdown (selectedUserChange)="onUserChange($event)" /> 
+  <div class="row-class">
+    <app-board-dropdown />
+    @if (selectedUser && selectedUser.isAdmin) {
+      <button (click)="openPopup()">Add board</button>
+    }
+  </div>
+  <app-board-popup [activeUser]="selectedUser" (confirmEvent)="onConfirm()" (cancelEvent)="onCancel()" #boardPopup />
+</div>

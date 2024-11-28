@@ -1,0 +1,15 @@
+@if (isLoading) {
+    <div>Loading...</div>
+}
+@if (!isLoading && errorMessage) {
+    <div>{{ errorMessage }}</div>
+}
+@if (!isLoading && !errorMessage) {
+    <div>
+        <select [(ngModel)]="selectedBoard">
+            @for (board of boards; track board.id) {
+              <option [ngValue]="board">{{ board.name }}</option>
+            }
+        </select>
+    </div>
+}

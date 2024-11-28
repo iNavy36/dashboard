@@ -45,6 +45,7 @@ public class BoardController {
 
     @PostMapping(consumes = "application/json")
     BoardShortened newBoard(@RequestBody BoardForm board) {
+        System.out.println("----" + board.getBoardTitle() + "----" + board.getUserId() + "----");
         if (!adminRepo.existsByUserId(board.getUserId()))
             throw new AdminNotExistingException(board.getUserId());
         return BoardService.convertToBoardShortened(

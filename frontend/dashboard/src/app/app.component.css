@@ -1,0 +1,13 @@
+.row-class {
+    display: flex;
+    justify-content: center;
+    text-align: center; 
+    gap: 5%;
+    width: 100%;
+}
+
+app-board-dropdown {
+    white-space: nowrap;
+    display: flex; 
+    justify-content: center;
+}

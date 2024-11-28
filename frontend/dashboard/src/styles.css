@@ -1,0 +1,22 @@
+/* You can add global styles to this file, and also import other style files */
+:root { 
+    --background-color: #ffffff; 
+    --text-color: #000000; 
+}
+
+body { 
+    font-family: 'Roboto', sans-serif; 
+    background-color: var(--background-color);
+    color: var(--text-color);
+}
+
+@media (prefers-color-scheme: dark) { 
+    :root { 
+        --background-color: #121212; 
+        --text-color: #d3d3d3; 
+    } 
+
+    select {
+        color: #fff;
+    }
+}

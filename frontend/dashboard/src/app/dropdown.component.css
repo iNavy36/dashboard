@@ -1,0 +1,25 @@
+div {
+    margin: auto;
+    text-align: center;
+    padding: 2%;
+    font-size: x-large;
+}
+
+select {
+    font-size: x-large;
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    background: transparent;
+    border: none;
+    outline: none;
+    padding: 10px 15px;
+}
+
+select::-ms-expand { 
+    display: none; 
+}
+
+select option { 
+    color: var(--background-color); 
+}
