@@ -32,7 +32,6 @@ export class UserDropdownComponent implements OnInit {
         } else {
           this.users = users;
           this.selectedUser = users.find(user => user.id === 1) || users[0];
-          console.log('Selected User:', this.selectedUser);
           this.selectedUserChange.emit(this.selectedUser);
         }
       },

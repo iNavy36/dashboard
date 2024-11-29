@@ -19,6 +19,9 @@ public class Admin {
     @OneToMany(mappedBy = "adminEntity", targetEntity = Board.class, cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Board> boards;
 
+    @OneToMany(mappedBy = "adminEntity", targetEntity = ListEntity.class, cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<ListEntity> lists;
+
     public Admin() {
     }
 
@@ -38,4 +41,11 @@ public class Admin {
         return boards;
     }
 
+    public List<ListEntity> getLists() {
+        return lists;
+    }
+
+    public void setUserEntity(User userEntity) {
+        this.userEntity = userEntity;
+    }
 }

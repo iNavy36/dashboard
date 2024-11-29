@@ -2,7 +2,7 @@
     display: flex;
     justify-content: center;
     text-align: center; 
-    gap: 5%;
+    gap: 2%;
     width: 100%;
 }
 
@@ -10,4 +10,13 @@ app-board-dropdown {
     white-space: nowrap;
     display: flex; 
     justify-content: center;
+}
+
+button {
+    font-size: large;
+    background: transparent;
+    color: var(--text-color);
+    border: #0e0e0e 1px solid;
+    padding: 10px 20px;
+    border-radius: 4px;
 }

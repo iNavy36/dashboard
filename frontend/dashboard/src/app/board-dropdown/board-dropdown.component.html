@@ -6,7 +6,8 @@
 }
 @if (!isLoading && !errorMessage) {
     <div>
-        <select [(ngModel)]="selectedBoard">
+        <select [(ngModel)]="selectedBoard" (ngModelChange)="onBoardChange()" [class.default]="isDefaultSelected()">
+            <option [ngValue]="null" class="default">Choose board</option>
             @for (board of boards; track board.id) {
               <option [ngValue]="board">{{ board.name }}</option>
             }

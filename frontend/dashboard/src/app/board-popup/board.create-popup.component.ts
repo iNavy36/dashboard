@@ -4,15 +4,15 @@ import { User } from '../user.service';
 import { FormsModule } from '@angular/forms';
 
 @Component({
-  selector: 'app-board-popup',
-  templateUrl: './board-popup.component.html',
+  selector: 'app-board-create-popup',
+  templateUrl: './board.create-popup.component.html',
   styleUrls: ['./board-popup.component.css'],
   imports: [
     FormsModule
   ],
   standalone: true
 })
-export class BoardPopupComponent {
+export class BoardCreatePopupComponent {
   isVisible = false;
   boardTitle = '';
   private boardUrl = 'http://localhost:8080/board';
@@ -43,7 +43,6 @@ export class BoardPopupComponent {
         next: () => { 
           this.confirmEvent.emit(); 
           this.hide(); 
-          window.location.reload();
         }, error: (error) => { 
           console.error('Error creating board:', error); 
         } 

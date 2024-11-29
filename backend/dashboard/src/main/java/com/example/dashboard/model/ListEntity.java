@@ -19,15 +19,20 @@ public class ListEntity {
     @JoinColumn(name = "board_id", nullable = false)
     private Board boardEntity;
 
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "admin_id", nullable = false)
+    private Admin adminEntity;
+
     @OneToMany(mappedBy = "listEntity", targetEntity = Card.class, cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Card> cards;
 
     public ListEntity() {
     }
 
-    public ListEntity(String name, Board boardEntity) {
+    public ListEntity(String name, Board boardEntity, Admin adminEntity) {
         this.name = name;
         this.boardEntity = boardEntity;
+        this.adminEntity = adminEntity;
     }
 
     public String getName() {
@@ -48,5 +53,13 @@ public class ListEntity {
 
     public List<Card> getCards() {
         return cards;
+    }
+
+    public Admin getAdminEntity() {
+        return adminEntity;
+    }
+
+    public void setAdminEntity(Admin adminEntity) {
+        this.adminEntity = adminEntity;
     }
 }

@@ -11,9 +11,11 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.example.dashboard.database.AdminRepository;
 import com.example.dashboard.database.BoardRepository;
 import com.example.dashboard.database.ListRepository;
 import com.example.dashboard.database.ListService;
+import com.example.dashboard.exceptions.AdminNotExistingException;
 import com.example.dashboard.exceptions.BoardNotFoundException;
 import com.example.dashboard.exceptions.ListNotFoundException;
 import com.example.dashboard.model.ListEntity;
@@ -25,10 +27,12 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 public class ListController {
     private final ListRepository listRepo;
     private final BoardRepository boardRepo;
+    private final AdminRepository adminRepo;
 
-    public ListController(ListRepository listRepo, BoardRepository boardRepo) {
+    public ListController(ListRepository listRepo, BoardRepository boardRepo, AdminRepository adminRepo) {
         this.listRepo = listRepo;
         this.boardRepo = boardRepo;
+        this.adminRepo = adminRepo;
     }
 
     @GetMapping("/{id}")
@@ -39,10 +43,13 @@ public class ListController {
 
     @PostMapping(consumes = "application/json")
     ListShortened newList(@RequestBody ListForm list) {
+        if (!adminRepo.existsByUserId(list.getUserId()))
+            throw new AdminNotExistingException(list.getUserId());
         if (!boardRepo.existsById(list.getBoardId()))
             throw new BoardNotFoundException(list.getBoardId());
         return ListService.convertToListShortened(
-                listRepo.save(new ListEntity(list.getListTitle(), boardRepo.getReferenceById(list.getBoardId()))));
+                listRepo.save(new ListEntity(list.getListTitle(), boardRepo.getReferenceById(list.getBoardId()),
+                        adminRepo.getByUserId(list.getUserId()))));
     }
 
     @PutMapping(consumes = "application/json", value = "/{id}")
@@ -72,11 +79,15 @@ class ListForm {
     @JsonProperty("board_id")
     private Long boardId;
 
+    @JsonProperty("user_id")
+    private Long userId;
+
     @JsonProperty("list_title")
     private String listTitle;
 
-    public ListForm(Long boardId, String listTitle) {
+    public ListForm(Long boardId, Long userId, String listTitle) {
         this.boardId = boardId;
+        this.userId = userId;
         this.listTitle = listTitle;
     }
 
@@ -86,6 +97,14 @@ class ListForm {
 
     public void setBoardId(Long boardId) {
         this.boardId = boardId;
+    }
+
+    public Long getUserId() {
+        return userId;
+    }
+
+    public void setUserId(Long userId) {
+        this.userId = userId;
     }
 
     public String getListTitle() {

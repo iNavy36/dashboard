@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, EventEmitter, Output } from '@angular/core';
 import { BoardService } from '../board.service';
 import { FormsModule } from '@angular/forms';
 import { Board } from '../board.service';
@@ -18,6 +18,8 @@ export class BoardDropdownComponent {
   isLoading = true; 
   errorMessage: string | null = null;
 
+  @Output() selectedBoardChange = new EventEmitter<Board | null>();
+
   constructor(private boardService: BoardService) {}
 
   ngOnInit(): void { 
@@ -27,8 +29,8 @@ export class BoardDropdownComponent {
         if (boards.length === 0) { 
           this.errorMessage = 'No boards available'; 
         } else { 
-          this.boards = boards; 
-          this.selectedBoard = boards.find(board => board.id === 1) || boards[0]; 
+          this.boards = boards.sort((a, b) => a.id - b.id); 
+          this.selectedBoard = null; 
         } 
       }, 
       error: (error) => { 
@@ -36,5 +38,14 @@ export class BoardDropdownComponent {
         this.errorMessage = 'Failed to load boards'; 
       } 
     }); 
+  }
+
+  isDefaultSelected(): boolean { 
+    return this.selectedBoard === null;
+  }
+
+  onBoardChange(): void { 
+    console.log('Selected Board:', this.selectedBoard);
+    this.selectedBoardChange.emit(this.selectedBoard); 
   }
 }
