@@ -1,0 +1,49 @@
+.add-card {
+    margin-top: 5%;
+}
+
+.loading {
+    color: antiquewhite;
+}
+
+.error {
+    color: firebrick;
+}
+
+.single-card {
+    background-color: antiquewhite;;
+    border: #0e0e0e 1px solid;
+    border-radius: 3%;
+    padding: 5%;
+    margin: 5%;
+    font-size: medium;
+    font-weight: 300;
+}
+
+.author {
+    font-size: small;
+    text-align: right;
+}
+
+.button-container { 
+    display: flex; 
+    justify-content: space-around;
+    margin-top: 10px;
+}
+
+.button-container button {
+    border-radius: 10%;
+    font-size: small;
+}
+
+button {
+    text-align: center;
+    padding: 1% 2%;
+    font-size: large;
+    border: #0e0e0e 1px solid;
+    border-radius: 20%;
+}
+
+.add-card button:active {
+    background-color: forestgreen;
+}

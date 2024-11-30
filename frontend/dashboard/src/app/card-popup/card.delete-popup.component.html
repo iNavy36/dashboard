@@ -1,11 +1,9 @@
 @if (isVisible) {
     <div class="popup-overlay">
         <div class="popup-content">
-            <label for="list-title">Title: </label>
-            <input type="text" id="list-title" [(ngModel)]="listTitle" />
-  
+            <span>Do you want to delete this card?</span>
             <div class="button-container">
-                <button (click)="confirm()" [disabled]="!listTitle.trim()">Confirm</button>
+                <button (click)="confirm()">Confirm</button>
                 <button (click)="cancel()">Cancel</button>
             </div>
         </div>

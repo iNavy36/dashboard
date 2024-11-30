@@ -6,6 +6,7 @@ import { Board, BoardService } from '../board.service';
 import { User } from '../user.service';
 import { ListUpdatePopupComponent } from '../list-popup/list.update-popup.component';
 import { ListDeletePopupComponent } from '../list-popup/list.delete-popup.component';
+import { CardDisplayComponent } from '../card-display/card-display.component';
 
 @Component({
   selector: 'app-list-display',
@@ -13,7 +14,8 @@ import { ListDeletePopupComponent } from '../list-popup/list.delete-popup.compon
     FormsModule,
     ListCreatePopupComponent,
     ListUpdatePopupComponent,
-    ListDeletePopupComponent
+    ListDeletePopupComponent,
+    CardDisplayComponent
   ],
   standalone: true,
   templateUrl: './list-display.component.html',
@@ -84,20 +86,25 @@ export class ListDisplayComponent implements OnChanges {
     if(this.activeUser && this.selectedBoard){
       this.boardService.getBoard(this.selectedBoard.id).subscribe({
         next: (board) => {
-          board.listsId.forEach((id) => {
-            this.listService.getList(id).subscribe({
-              next: (list) => {
-                this.isLoading = false; 
-                this.lists.push(list);
-                this.isLoading = this.lists.length !== board.listsId.length;
-                if (!this.isLoading) this.lists = this.lists.sort((a, b) => a.listId - b.listId); 
-              },
-              error: (error) => {
-                this.isLoading = false;
-                this.errorMessage = 'Failed to load lists';
-              }
-            });
-          })
+          if(board.listsId[0]) {
+            board.listsId.forEach((id) => {
+              this.listService.getList(id).subscribe({
+                next: (list) => {
+                  this.isLoading = false; 
+                  this.lists.push(list);
+                  this.isLoading = this.lists.length !== board.listsId.length;
+                  if (!this.isLoading) this.lists = this.lists.sort((a, b) => a.listId - b.listId); 
+                },
+                error: (error) => {
+                  this.isLoading = false;
+                  this.errorMessage = 'Failed to load lists';
+                }
+              });
+            })
+          } else {
+            this.isLoading = false; 
+            this.errorMessage = 'No lists available'; 
+          }
         },
         error: (error) => {
           this.isLoading = false;

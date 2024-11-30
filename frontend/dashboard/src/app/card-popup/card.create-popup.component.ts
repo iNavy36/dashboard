@@ -2,21 +2,23 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
 import { User } from '../user.service';
+import { List } from '../list.service';
 
 @Component({
-  selector: 'app-board-create-popup',
-  templateUrl: './board.create-popup.component.html',
-  styleUrls: ['./board-popup.component.css'],
+  selector: 'app-card-create-popup',
   imports: [
     FormsModule
   ],
-  standalone: true
+  standalone: true,
+  templateUrl: './card.create-popup.component.html',
+  styleUrl: './card-popup.component.css'
 })
-export class BoardCreatePopupComponent {
+export class CardCreatePopupComponent {
   isVisible = false;
-  boardTitle = '';
-  private boardUrl = 'http://localhost:8080/board';
+  content = '';
+  private cardUrl = 'http://localhost:8080/card';
   @Input() activeUser: User | null = null;
+  @Input() currentList: List | null = null;
 
   @Output() confirmEvent = new EventEmitter<string>();
   @Output() cancelEvent = new EventEmitter<void>();
@@ -29,23 +31,24 @@ export class BoardCreatePopupComponent {
 
   hide(): void {
     this.isVisible = false;
-    this.boardTitle = '';
+    this.content = '';
   }
 
   confirm(): void {
-    if (this.activeUser) { 
+    if (this.activeUser && this.currentList) { 
       const payload = { 
         "user_id": this.activeUser.id, 
-        "board_title": this.boardTitle 
-      }; 
-      this.http.post(this.boardUrl, payload).subscribe({ 
+        "list_id": this.currentList.listId,
+        "content": this.content
+      };
+      this.http.post(this.cardUrl, payload).subscribe({ 
         next: () => { 
           this.confirmEvent.emit(); 
           this.hide(); 
         }, error: (error) => { 
-          console.error('Error creating board:', error); 
+          console.error('Error creating card:', error); 
         } 
-      }); 
+      });
     }
   }
 

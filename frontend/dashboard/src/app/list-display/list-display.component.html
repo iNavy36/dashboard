@@ -18,10 +18,13 @@
         @for (list of lists; track list.listId) {
             <div class="list-frame">
                 {{ list.name }}
+                <app-card-display [currentList]="list" [activeUser]="activeUser" />
+                @if (activeUser?.isAdmin) {
                 <div class="button-container">
                     <button title="Change list" (click)="openListUpdatePopup(list)">Change list title</button>
                     <button title="Delete list" (click)="openListDeletePopup(list)">Delete list</button>
                 </div>
+                }
             </div>
         }
             <div class="add-list-frame">
@@ -31,6 +34,5 @@
         <app-list-create-popup [activeUser]="activeUser" [selectedBoard]="selectedBoard" (confirmEvent)="getLists()" #listCreatePopup />
         <app-list-update-popup [activeUser]="activeUser" [selectedBoard]="selectedBoard" (confirmEvent)="getLists()" #listUpdatePopup />
         <app-list-delete-popup [activeUser]="activeUser" [selectedBoard]="selectedBoard" (confirmEvent)="getLists()" #listDeletePopup />
-
     }
 }

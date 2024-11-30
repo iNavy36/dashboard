@@ -2,48 +2,48 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
 import { User } from '../user.service';
-import { Board } from '../board.service';
 import { List } from '../list.service';
+import { Card } from '../card.service';
 
 @Component({
-  selector: 'app-list-delete-popup',
+  selector: 'app-card-delete-popup',
   imports: [
     FormsModule
   ],
   standalone: true,
-  templateUrl: './list.delete-popup.component.html',
-  styleUrl: './list-popup.component.css'
+  templateUrl: './card.delete-popup.component.html',
+  styleUrl: './card-popup.component.css'
 })
-export class ListDeletePopupComponent {
+export class CardDeletePopupComponent {
   isVisible = false;
-  listTitle = '';
-  private listUrl = 'http://localhost:8080/list';
+  content = '';
+  private cardUrl = 'http://localhost:8080/card';
   @Input() activeUser: User | null = null;
-  @Input() selectedBoard: Board | null = null;
-  currentList: List | null = null;
-
+  @Input() currentList: List | null = null;
+  currentCard: Card | null = null;
+  
   @Output() confirmEvent = new EventEmitter<string>();
   @Output() cancelEvent = new EventEmitter<void>();
 
   constructor(private http: HttpClient) {}
 
-  show(list: List): void {
-    this.currentList = list;
-    this.listTitle = this.currentList.name;
+  show(card: Card): void {
+    this.currentCard = card;
+    this.content = this.currentCard.content;
     this.isVisible = true;
   }
 
   hide(): void {
     this.isVisible = false;
-    this.listTitle = '';
+    this.content = '';
   }
 
   confirm(): void {
-    if (this.activeUser && this.selectedBoard && this.currentList) { 
+    if (this.activeUser && this.currentList && this.currentCard) { 
       const payload = { 
         "user_id": this.activeUser.id, 
-        "board_id": this.selectedBoard.id,
-        "list_title": this.listTitle
+        "list_id": this.currentList.listId,
+        "content": this.content
       };
       const options = { 
         headers: new HttpHeaders({ 
@@ -51,17 +51,17 @@ export class ListDeletePopupComponent {
         }), 
         body: payload, 
       };
-      this.http.delete(this.listUrl + "/" + this.currentList.listId.toString(), options).subscribe({ 
+      this.http.delete(this.cardUrl + "/" + this.currentCard.cardId.toString(), options).subscribe({ 
         next: () => { 
           this.confirmEvent.emit(); 
           this.hide(); 
         }, error: (error) => { 
-          console.error('Error deleting list:', error); 
+          console.error('Error deleting card:', error); 
         } 
       }); 
     }
   }
-    
+
   cancel(): void {
     this.cancelEvent.emit();
     this.hide();
