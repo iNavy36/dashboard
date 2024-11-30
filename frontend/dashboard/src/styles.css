@@ -8,6 +8,7 @@ body {
     font-family: 'Roboto', sans-serif; 
     background-color: var(--background-color);
     color: var(--text-color);
+    overflow-x: hidden;
 }
 
 @media (prefers-color-scheme: dark) { 

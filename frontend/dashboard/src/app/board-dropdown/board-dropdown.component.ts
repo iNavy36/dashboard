@@ -29,6 +29,9 @@ export class BoardDropdownComponent {
         if (boards.length === 0) { 
           this.errorMessage = 'No boards available'; 
         } else { 
+          boards.forEach((board) => {
+            if (board.listsId[0] === null) board.listsId.pop();
+          })
           this.boards = boards.sort((a, b) => a.id - b.id); 
           this.selectedBoard = null; 
         } 
@@ -45,7 +48,6 @@ export class BoardDropdownComponent {
   }
 
   onBoardChange(): void { 
-    console.log('Selected Board:', this.selectedBoard);
     this.selectedBoardChange.emit(this.selectedBoard); 
   }
 }

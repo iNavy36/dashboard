@@ -23,6 +23,12 @@ export class BoardService {
     ); 
   }
 
+  getBoard(id: number): Observable<Board> {
+    return this.http.get<Board>(this.boardUrl + "/" + id).pipe(
+      catchError(this.handleError<Board>('getBoard', {} as Board))
+    ); 
+  }
+
   private handleError<T>(operation = 'operation', result?: T) {
     return (error: any): Observable<T> => {
       console.error(`${operation} failed: ${error.message}`);

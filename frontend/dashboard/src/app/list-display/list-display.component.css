@@ -1,0 +1,96 @@
+.container { 
+    display: flex; 
+    flex-wrap: nowrap; 
+    justify-content: center; 
+    overflow: hidden;
+}
+
+.scrollable-container { 
+    display: flex; 
+    flex-wrap: nowrap; 
+    overflow-x: auto; 
+    width: 100%; 
+    padding: 10px; 
+    margin: 0 auto;
+}
+
+.empty-frame, .list-frame, .add-list-frame { 
+    flex: 0 0 30%;
+    max-width: 30%;
+    margin: 10px; 
+    box-sizing: border-box; 
+    text-align: center; 
+}
+
+.empty-frame { 
+    display: flex; 
+    align-items: center; 
+    justify-content: center; 
+    font-size: xx-large;
+    height: calc(100vh - 200px);
+}
+
+.list-frame { 
+    background-color: #f0eee0; /* Adjust background color as needed */ 
+    color: var(--background-color);
+    font-size: larger;
+    font-weight: bold;
+    padding: 1%; /* Adjust padding as needed */ 
+    border: 1px solid #ddd; /* Adjust border as needed */ 
+    min-width: 30%;
+    display: flex; 
+    flex-direction: column; 
+    justify-content: space-between;
+}
+
+.add-list-frame { 
+    display: flex; 
+    align-items: center; 
+    justify-content: center; 
+    height: calc(100vh - 200px);
+    min-width: 30%;
+}
+
+.container:only-child .empty-frame, 
+.container:only-child .add-list-frame, 
+.scrollable-container:only-child .list-frame, 
+.scrollable-container:only-child .add-list-frame { 
+    flex-basis: 100%; /* Takes full width */ 
+}
+
+.container > .empty-frame:nth-child(1):only-child,
+.container > .add-list-frame:nth-child(2):only-child,
+.scrollable-container > .list-frame:nth-child(1):only-child,
+.scrollable-container > .add-list-frame:nth-child(2):only-child { 
+    flex-basis: 50%; /* Each item takes half the width */ 
+}
+
+.scrollable-container.two-frames { 
+    justify-content: center; 
+}
+
+.scrollable-container > .list-frame, 
+.scrollable-container > .add-list-frame, 
+.container > .empty-frame, 
+.container > .add-list-frame { 
+    flex-basis: 30%; /* Each item takes about one third of the container */ 
+}
+
+.button-container { 
+    display: flex; 
+    justify-content: space-between; 
+    padding: 10px 0; 
+}
+
+.button-container button {
+    margin: 0 7%;
+}
+
+button {
+    font-size: large;
+    background: var(--text-color);
+    color: var(--background-color);
+    border: #0e0e0e 1px solid;
+    padding: 10px 20px;
+    border-radius: 4px;
+}

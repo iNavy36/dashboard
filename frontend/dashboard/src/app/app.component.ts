@@ -4,6 +4,7 @@ import { BoardDropdownComponent } from './board-dropdown/board-dropdown.componen
 import { BoardCreatePopupComponent } from './board-popup/board.create-popup.component';
 import { BoardUpdatePopupComponent } from './board-popup/board.update-popup.component';
 import { BoardDeletePopupComponent } from './board-popup/board.delete-popup.component';
+import { ListDisplayComponent } from './list-display/list-display.component';
 import { User } from './user.service';
 import { Board, BoardService } from './board.service';
 
@@ -15,7 +16,9 @@ import { Board, BoardService } from './board.service';
       BoardDropdownComponent, 
       BoardCreatePopupComponent, 
       BoardUpdatePopupComponent,
-      BoardDeletePopupComponent],
+      BoardDeletePopupComponent,
+      ListDisplayComponent
+    ],
   standalone: true
 })
 export class AppComponent {
@@ -57,6 +60,9 @@ export class AppComponent {
           this.boardDropdown.errorMessage = 'No boards available'; 
         } else { 
           this.boardDropdown.errorMessage = null;
+          boards.forEach((board) => {
+            if (board.listsId[0] === null) board.listsId.pop();
+          })
           this.boardDropdown.boards = boards.sort((a, b) => a.id - b.id); // Sort boards by id 
         }
         this.boardDropdown.selectedBoard = null;

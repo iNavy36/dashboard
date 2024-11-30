@@ -26,7 +26,6 @@ export class UserDropdownComponent implements OnInit {
     this.userService.getUsers().subscribe({
       next: (users) => {
         this.isLoading = false;
-        console.log('Fetched Users:', users);
         if (users.length === 0) {
           this.errorMessage = 'No users available';
         } else {

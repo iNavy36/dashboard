@@ -6,6 +6,7 @@ div {
 }
 
 select {
+    text-align-last: center;
     font-size: x-large;
     appearance: none;
     -webkit-appearance: none;

@@ -1,0 +1,13 @@
+@if (isVisible) {
+    <div class="popup-overlay">
+        <div class="popup-content">
+            <label for="board-title">New title: </label>
+            <input type="text" id="list-title" [(ngModel)]="listTitle" />
+  
+            <div class="button-container">
+                <button (click)="confirm()" [disabled]="!listTitle.trim()">Confirm</button>
+                <button (click)="cancel()">Cancel</button>
+            </div>
+        </div>
+    </div>
+}

@@ -13,4 +13,5 @@
   <app-board-create-popup [activeUser]="selectedUser" (confirmEvent)="getBoards()" #boardCreatePopup />
   <app-board-update-popup [activeUser]="selectedUser" [selectedBoard]="selectedBoard" (confirmEvent)="getBoards()" #boardEditPopup />
   <app-board-delete-popup [activeUser]="selectedUser" [selectedBoard]="selectedBoard" (confirmEvent)="getBoards()" #boardDeletePopup />
+  <app-list-display [selectedBoard]="selectedBoard" [activeUser]="selectedUser" />
 </div>

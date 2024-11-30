@@ -29,7 +29,6 @@ export class BoardDeletePopupComponent {
     if (this.selectedBoard) { 
         this.boardTitle = this.selectedBoard.name;
     } 
-    console.log("delete show");
     this.isVisible = true; 
   }
 
@@ -49,8 +48,7 @@ export class BoardDeletePopupComponent {
             'Content-Type': 'application/json', 
         }), 
         body: payload, 
-      }
-      console.log(payload);
+      };
       this.http.delete(this.boardUrl + "/" + this.selectedBoard.id.toString(), options).subscribe({ 
         next: () => { 
           this.confirmEvent.emit(); 
