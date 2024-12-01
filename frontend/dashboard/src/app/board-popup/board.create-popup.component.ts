@@ -2,6 +2,7 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
 import { User } from '../user.service';
+import { environment } from '../../environments/environment';
 
 @Component({
   selector: 'app-board-create-popup',
@@ -15,7 +16,7 @@ import { User } from '../user.service';
 export class BoardCreatePopupComponent {
   isVisible = false;
   boardTitle = '';
-  private boardUrl = 'http://localhost:8080/board';
+  private boardUrl = environment.apiUrl + '/board';
   @Input() activeUser: User | null = null;
 
   @Output() confirmEvent = new EventEmitter<string>();

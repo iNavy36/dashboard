@@ -4,6 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { User } from '../user.service';
 import { List } from '../list.service';
 import { Card } from '../card.service';
+import { environment } from '../../environments/environment';
 
 @Component({
   selector: 'app-card-delete-popup',
@@ -17,7 +18,7 @@ import { Card } from '../card.service';
 export class CardDeletePopupComponent {
   isVisible = false;
   content = '';
-  private cardUrl = 'http://localhost:8080/card';
+  private cardUrl = environment.apiUrl + '/card';
   @Input() activeUser: User | null = null;
   @Input() currentList: List | null = null;
   currentCard: Card | null = null;

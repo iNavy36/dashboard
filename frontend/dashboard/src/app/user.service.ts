@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http'; 
 import { Observable, of } from 'rxjs'; 
 import { catchError } from 'rxjs/operators'; 
+import { environment } from '../environments/environment';
 
 export interface User { 
   id: number; 
@@ -11,7 +12,7 @@ export interface User {
 
 @Injectable({ providedIn: 'root' }) 
 export class UserService { 
-  private usersUrl = 'http://localhost:8080/users'; // Update with your backend URL, TODO: staviti loclhost link prije /users u dotenv
+  private usersUrl = environment.apiUrl + '/users'; // Update with your backend URL, TODO: staviti loclhost link prije /users u dotenv
   constructor(private http: HttpClient) {} 
   
   getUsers(): Observable<User[]> { 

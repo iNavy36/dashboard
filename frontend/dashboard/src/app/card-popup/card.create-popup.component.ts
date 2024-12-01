@@ -3,6 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
 import { User } from '../user.service';
 import { List } from '../list.service';
+import { environment } from '../../environments/environment';
 
 @Component({
   selector: 'app-card-create-popup',
@@ -16,7 +17,7 @@ import { List } from '../list.service';
 export class CardCreatePopupComponent {
   isVisible = false;
   content = '';
-  private cardUrl = 'http://localhost:8080/card';
+  private cardUrl = environment.apiUrl + '/card';
   @Input() activeUser: User | null = null;
   @Input() currentList: List | null = null;
 

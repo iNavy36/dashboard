@@ -1,0 +1,13 @@
+@if (isVisible) {
+    <div class="popup-overlay">
+        <div class="popup-content">
+            <label for="card-content">New text: </label>
+            <textarea type="text" id="card-content" [(ngModel)]="content"></textarea>
+  
+            <div class="button-container">
+                <button (click)="confirm()" [disabled]="!content.trim()">Confirm</button>
+                <button (click)="cancel()">Cancel</button>
+            </div>
+        </div>
+    </div>
+}

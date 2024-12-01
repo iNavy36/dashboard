@@ -2,6 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable, of } from 'rxjs';
 import { catchError } from 'rxjs/operators';
+import { environment } from '../environments/environment';
 
 export interface List { 
   listId: number; 
@@ -15,7 +16,7 @@ export interface List {
   providedIn: 'root'
 })
 export class ListService {
-  private listUrl = 'http://localhost:8080/list';
+  private listUrl = environment.apiUrl + '/list';
 
   constructor(private http: HttpClient) { }
 

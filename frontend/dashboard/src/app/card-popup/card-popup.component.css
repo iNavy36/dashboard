@@ -56,3 +56,20 @@ textarea#card-content {
     resize: none;
     flex-grow: 1;
 }
+
+select, select option { 
+    color: var(--background-color); 
+}
+
+select {
+    text-align-last: center;
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    background: transparent;
+    padding: 5px 15px;
+}
+
+select::-ms-expand { 
+    display: none; 
+}

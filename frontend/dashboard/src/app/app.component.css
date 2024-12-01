@@ -1,22 +1,35 @@
 .row-class {
     display: flex;
     justify-content: center;
+    align-items: center;
+    position: relative;
     text-align: center; 
-    gap: 2%;
     width: 100%;
+}
+
+.row-class > .button-container:last-child {
+    position: absolute;
+    right: 0;
 }
 
 app-board-dropdown {
     white-space: nowrap;
     display: flex; 
-    justify-content: center;
+    justify-content: right;
+}
+
+.button-container {
+    display: flex;
+    margin-right: 5%;
 }
 
 button {
+    white-space: nowrap;
     font-size: large;
     background: transparent;
     color: var(--text-color);
     border: #0e0e0e 1px solid;
     padding: 10px 20px;
     border-radius: 4px;
+    margin-left: 1%;
 }

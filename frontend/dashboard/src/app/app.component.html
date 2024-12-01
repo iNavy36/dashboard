@@ -3,11 +3,13 @@
   <div class="row-class">
     <app-board-dropdown (selectedBoardChange)="onBoardChange($event)" />
     @if (selectedUser && selectedUser.isAdmin) {
-      <button title="Add board" (click)="openBoardCreatePopup()">Add board</button>
-      @if (selectedBoard) {
-        <button title="Edit board" (click)="openBoardUpdatePopup()">Edit board</button>
-        <button title="Delete board" (click)="openBoardDeletePopup()">Delete board</button>
-      }
+      <div class="button-container">
+        @if (selectedBoard) {
+            <button title="Edit board" (click)="openBoardUpdatePopup()">Edit board</button>
+            <button title="Delete board" (click)="openBoardDeletePopup()">Delete board</button>
+        }
+        <button title="Add board" (click)="openBoardCreatePopup()">Add board</button>
+      </div>
     }
   </div>
   <app-board-create-popup [activeUser]="selectedUser" (confirmEvent)="getBoards()" #boardCreatePopup />

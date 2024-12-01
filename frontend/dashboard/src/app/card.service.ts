@@ -2,6 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable, of } from 'rxjs';
 import { catchError } from 'rxjs/operators';
+import { environment } from '../environments/environment';
 
 export interface Card {
   cardId: number,
@@ -14,7 +15,7 @@ export interface Card {
   providedIn: 'root'
 })
 export class CardService {
-  private cardUrl = 'http://localhost:8080/card';
+  private cardUrl = environment.apiUrl + '/card';
 
   constructor(private http: HttpClient) { }
 

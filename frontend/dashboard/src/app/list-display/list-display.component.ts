@@ -1,4 +1,4 @@
-import { Component, Input, OnChanges, SimpleChanges, ViewChild } from '@angular/core';
+import { Component, Input, OnChanges, QueryList, SimpleChanges, ViewChild, ViewChildren } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { ListCreatePopupComponent } from '../list-popup/list.create-popup.component';
 import { ListService, List } from '../list.service';
@@ -31,6 +31,7 @@ export class ListDisplayComponent implements OnChanges {
   @ViewChild('listCreatePopup') listCreatePopup!: ListCreatePopupComponent;
   @ViewChild('listUpdatePopup') listUpdatePopup!: ListUpdatePopupComponent;
   @ViewChild('listDeletePopup') listDeletePopup!: ListDeletePopupComponent;
+  @ViewChildren(CardDisplayComponent) cardDisplayComponents!: QueryList<CardDisplayComponent>;
 
   constructor(private listService: ListService, private boardService: BoardService) {}
 
@@ -111,6 +112,13 @@ export class ListDisplayComponent implements OnChanges {
           this.errorMessage = 'Failed to load board';
         }
       });
+    }
+  }
+
+  refreshCardDisplayComponent(list: List): void { 
+    const cardDisplayComponent = this.cardDisplayComponents.find(component => component.currentList?.listId === list.listId); 
+    if (cardDisplayComponent) { 
+      cardDisplayComponent.getCards(); 
     }
   }
 }

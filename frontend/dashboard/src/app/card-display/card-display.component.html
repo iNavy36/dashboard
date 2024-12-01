@@ -1,32 +1,34 @@
-<div>
     @if (isLoading) {
         <div class="loading">Loading cards...</div>
     }
     @if (errorMessage) {
         <div class="error">{{ errorMessage }}</div>
     }
-    @if (!isLoading && !errorMessage) {
-        <div class="scrollable-container">
-            @for (card of cards; track card.cardId) {
-                <div class="single-card">
-                    {{ card.content }}
-                    <div class="author">
-                        by {{getUserName(card.userId)}}
-                    </div>
-                    @if (showButtonContainer(card.userId)) {
-                    <div class="button-container">
-                        <button (click)="editCard(card)">Edit</button>
-                        <button (click)="moveCard(card)">Move</button>
-                        <button (click)="deleteCard(card)">Delete</button>
-                    </div>
-                    }
-                </div>
-            }
-        </div>
-    }
     <div class="add-card">
         <button (click)="addCard()">+</button>
     </div>
+    @if (!isLoading && !errorMessage) {
+        <div class="container">
+            <div class="scrollable-container">
+                @for (card of cards; track card.cardId) {
+                    <div class="single-card">
+                        <div class="content">{{ card.content }}</div>
+                        <div class="author">
+                            by {{getUserName(card.userId)}}
+                        </div>
+                        @if (showButtonContainer(card.userId)) {
+                        <div class="button-container">
+                            <button (click)="editCard(card)">Edit</button>
+                            <button (click)="moveCard(card)">Move</button>
+                            <button (click)="deleteCard(card)">Delete</button>
+                        </div>
+                        }
+                    </div>
+                }
+            </div>
+        </div>
+    }
     <app-card-create-popup [activeUser]="activeUser" [currentList]="currentList" (confirmEvent)="getCards()" #cardCreatePopup />
+    <app-card-edit-popup [activeUser]="activeUser" [currentList]="currentList" (confirmEvent)="getCards()" #cardEditPopup />
+    <app-card-move-popup [activeUser]="activeUser" [currentList]="currentList" [selectedBoard]="selectedBoard" (confirmEvent)="refreshCardLists($event)" #cardMovePopup />
     <app-card-delete-popup [activeUser]="activeUser" [currentList]="currentList" (confirmEvent)="getCards()" #cardDeletePopup />
-</div>

@@ -4,6 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { User } from '../user.service';
 import { Board } from '../board.service';
 import { List } from '../list.service';
+import { environment } from '../../environments/environment';
 
 @Component({
   selector: 'app-list-delete-popup',
@@ -17,7 +18,7 @@ import { List } from '../list.service';
 export class ListDeletePopupComponent {
   isVisible = false;
   listTitle = '';
-  private listUrl = 'http://localhost:8080/list';
+  private listUrl = environment.apiUrl + '/list';
   @Input() activeUser: User | null = null;
   @Input() selectedBoard: Board | null = null;
   currentList: List | null = null;

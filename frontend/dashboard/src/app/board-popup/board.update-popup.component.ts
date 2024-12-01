@@ -3,6 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { User } from '../user.service';
 import { FormsModule } from '@angular/forms';
 import { Board } from '../board.service';
+import { environment } from '../../environments/environment';
 
 @Component({
   selector: 'app-board-update-popup',
@@ -16,7 +17,7 @@ import { Board } from '../board.service';
 export class BoardUpdatePopupComponent {
     isVisible = false; 
     boardTitle = ''; 
-    private boardUrl = 'http://localhost:8080/board'; 
+    private boardUrl = environment.apiUrl + '/board'; 
     @Input() activeUser: User | null = null; 
     @Input() selectedBoard: Board | null = null;
 

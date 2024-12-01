@@ -1,16 +1,22 @@
-import { Component, Input, ViewChild } from '@angular/core';
+import { Component, Host, Input, ViewChild } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { List, ListService } from '../list.service';
 import { User, UserService } from '../user.service';
 import { Card, CardService } from '../card.service';
+import { ListDisplayComponent } from '../list-display/list-display.component';
 import { CardCreatePopupComponent } from '../card-popup/card.create-popup.component';
 import { CardDeletePopupComponent } from '../card-popup/card.delete-popup.component';
+import { CardEditPopupComponent } from '../card-popup/card.edit-popup.component';
+import { CardMovePopupComponent } from '../card-popup/card.move-popup.component';
+import { Board } from '../board.service';
 
 @Component({
   selector: 'app-card-display',
   imports: [
     FormsModule,
     CardCreatePopupComponent,
+    CardEditPopupComponent,
+    CardMovePopupComponent,
     CardDeletePopupComponent
   ],
   standalone: true,
@@ -20,15 +26,21 @@ import { CardDeletePopupComponent } from '../card-popup/card.delete-popup.compon
 export class CardDisplayComponent {
   @Input() currentList: List | null = null;
   @Input() activeUser: User | null = null;
+  @Input() selectedBoard: Board | null = null;
   cards: Card[] = []; 
   users: User[] = [];
   isLoading = false;
   errorMessage: string | null = null;
   
   @ViewChild('cardCreatePopup') cardCreatePopup!: CardCreatePopupComponent;
+  @ViewChild('cardEditPopup') cardEditPopup!: CardEditPopupComponent;
+  @ViewChild('cardMovePopup') cardMovePopup!: CardMovePopupComponent;
   @ViewChild('cardDeletePopup') cardDeletePopup!: CardDeletePopupComponent;
 
-  constructor(private listService: ListService, private cardService: CardService, private userService: UserService) {}
+  constructor(@Host() private listDisplay: ListDisplayComponent, 
+    private listService: ListService, 
+    private cardService: CardService, 
+    private userService: UserService) {}
 
   ngOnInit(): void {
     if(this.currentList && this.currentList.cardsId[0]){
@@ -38,29 +50,29 @@ export class CardDisplayComponent {
       this.userService.getUsers().subscribe({
         next: (user) => {
           this.users = user;
+          
+          this.cards = [];
+
+          this.currentList!.cardsId.forEach((id) => {
+            this.cardService.getCard(id).subscribe({
+              next: (card) => {
+                this.isLoading = false; 
+                this.cards.push(card);
+                this.isLoading = this.cards.length !== this.currentList!.cardsId.length;
+                if (!this.isLoading) this.cards = this.cards.sort((a, b) => a.listId - b.listId); 
+              },
+              error: (error) => {
+                this.isLoading = false;
+                this.errorMessage = 'Failed to load cards';
+              }
+            });
+          })
         }, 
         error: (error) => {
           this.isLoading = false;
           this.errorMessage = 'Failed to load users';
         }
       });
-
-      this.cards = [];
-
-      this.currentList.cardsId.forEach((id) => {
-        this.cardService.getCard(id).subscribe({
-          next: (card) => {
-            this.isLoading = false; 
-            this.cards.push(card);
-            this.isLoading = this.cards.length !== this.currentList!.cardsId.length;
-            if (!this.isLoading) this.cards = this.cards.sort((a, b) => a.listId - b.listId); 
-          },
-          error: (error) => {
-            this.isLoading = false;
-            this.errorMessage = 'Failed to load cards';
-          }
-        });
-      })
     } else {
       this.isLoading = false; 
     }
@@ -80,15 +92,19 @@ export class CardDisplayComponent {
   }
 
   editCard(card: Card): void { 
-    console.log(`Edit card with ID ${card.cardId}`); // Implement edit logic here 
+    this.cardEditPopup.show(card);
   } 
   
   moveCard(card: Card): void { 
-    console.log(`Move card with ID ${card.cardId}`); // Implement move logic here 
+    this.cardMovePopup.show(card);
   } 
   
   deleteCard(card: Card): void { 
     this.cardDeletePopup.show(card);
+  }
+
+  refreshTwoLists(newList: List){
+    this.getCards();
   }
 
   getCards(): void { 
@@ -97,32 +113,52 @@ export class CardDisplayComponent {
     this.errorMessage = null;
 
     if(this.activeUser && this.currentList){
-      this.listService.getList(this.currentList.listId).subscribe({
-        next: (list) => {
-          if(list.cardsId[0]) {
-            list.cardsId.forEach((id) => {
-              this.cardService.getCard(id).subscribe({
-                next: (card) => {
-                  this.isLoading = false; 
-                  this.cards.push(card);
-                  this.isLoading = this.cards.length !== list.cardsId.length;
-                  if (!this.isLoading) this.cards = this.cards.sort((a, b) => a.listId - b.listId); 
-                },
-                error: (error) => {
-                  this.isLoading = false;
-                  this.errorMessage = 'Failed to load cards';
-                }
-              });
-            })
-          } else {
-            this.isLoading = false; 
-          }
-        },
+      this.userService.getUsers().subscribe({
+        next: (user) => {
+          this.users = user;
+          this.listService.getList(this.currentList!.listId).subscribe({
+            next: (list) => {
+              if(list.cardsId[0]) {
+                list.cardsId.forEach((id) => {
+                  this.cardService.getCard(id).subscribe({
+                    next: (card) => {
+                      this.isLoading = false; 
+                      this.cards.push(card);
+                      this.isLoading = this.cards.length !== list.cardsId.length;
+                      if (!this.isLoading) this.cards = this.cards.sort((a, b) => a.listId - b.listId); 
+                    },
+                    error: (error) => {
+                      this.isLoading = false;
+                      this.errorMessage = 'Failed to load cards';
+                    }
+                  });
+                })
+              } else {
+                this.isLoading = false; 
+              }
+            },
+            error: (error) => {
+              this.isLoading = false;
+              this.errorMessage = 'Failed to load list';
+            }
+          });
+        }, 
         error: (error) => {
           this.isLoading = false;
-          this.errorMessage = 'Failed to load list';
+          this.errorMessage = 'Failed to load users';
         }
       });
     }
+  }
+
+  refreshCardLists(newList: List): void { 
+    this.getCards(); 
+    this.refreshCardDisplayComponent(newList); 
+  } 
+  
+  private refreshCardDisplayComponent(list: List): void { 
+    // Assuming this method is available in ListDisplayComponent 
+    const parent = this.listDisplay; 
+    parent.refreshCardDisplayComponent(list); 
   }
 }

@@ -7,29 +7,33 @@
     @if (errorMessage) {
         <div class="container">
             <div class="empty-frame">{{ errorMessage }}</div>
+            @if (activeUser?.isAdmin) {
             <div class="add-list-frame">
                 <button (click)="openListCreatePopup()">Add list to current board</button>
             </div>
+            }
         </div>
         <app-list-create-popup [activeUser]="activeUser" [selectedBoard]="selectedBoard"(confirmEvent)="getLists()"  #listCreatePopup />
     }
     @if (!isLoading && !errorMessage) {
-        <div class="scrollable-container" [class.two-frames]="lists.length === 1">
+        <div class="scrollable-container" [class.two-frames]="lists.length === 1 && activeUser?.isAdmin || lists.length <= 2 && !activeUser?.isAdmin">
         @for (list of lists; track list.listId) {
             <div class="list-frame">
-                {{ list.name }}
-                <app-card-display [currentList]="list" [activeUser]="activeUser" />
+                <div class="name">{{ list.name }}</div>
                 @if (activeUser?.isAdmin) {
                 <div class="button-container">
                     <button title="Change list" (click)="openListUpdatePopup(list)">Change list title</button>
                     <button title="Delete list" (click)="openListDeletePopup(list)">Delete list</button>
                 </div>
                 }
+                <app-card-display [currentList]="list" [activeUser]="activeUser" [selectedBoard]="selectedBoard" />
             </div>
-        }
+            }
+            @if (activeUser?.isAdmin) {
             <div class="add-list-frame">
                 <button title="Add list" (click)="openListCreatePopup()">Add list to current board</button>
             </div>
+            }
         </div>
         <app-list-create-popup [activeUser]="activeUser" [selectedBoard]="selectedBoard" (confirmEvent)="getLists()" #listCreatePopup />
         <app-list-update-popup [activeUser]="activeUser" [selectedBoard]="selectedBoard" (confirmEvent)="getLists()" #listUpdatePopup />
