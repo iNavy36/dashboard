@@ -14,10 +14,8 @@ import org.springframework.web.bind.annotation.RestController;
 import com.example.dashboard.database.AdminRepository;
 import com.example.dashboard.database.BoardRepository;
 import com.example.dashboard.database.ListRepository;
-import com.example.dashboard.database.ListService;
-import com.example.dashboard.exceptions.AdminNotExistingException;
-import com.example.dashboard.exceptions.BoardNotFoundException;
-import com.example.dashboard.exceptions.ListNotFoundException;
+import com.example.dashboard.services.ListService;
+import com.example.dashboard.exceptions.NotFoundException;
 import com.example.dashboard.model.ListEntity;
 import com.example.dashboard.query_interfaces.ListShortened;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -38,15 +36,15 @@ public class ListController {
     @GetMapping("/{id}")
     ListShortened one(@PathVariable Long id) {
         return ListService.getSingleList(this.listRepo.getSingleList(id))
-                .orElseThrow(() -> new ListNotFoundException(id));
+                .orElseThrow(() -> new NotFoundException("list", id));
     }
 
     @PostMapping(consumes = "application/json")
     ListShortened newList(@RequestBody ListForm list) {
         if (!adminRepo.existsByUserId(list.getUserId()))
-            throw new AdminNotExistingException(list.getUserId());
+            throw new NotFoundException("admin", list.getUserId());
         if (!boardRepo.existsById(list.getBoardId()))
-            throw new BoardNotFoundException(list.getBoardId());
+            throw new NotFoundException("board", list.getBoardId());
         return ListService.convertToListShortened(
                 listRepo.save(new ListEntity(list.getListTitle(), boardRepo.getReferenceById(list.getBoardId()),
                         adminRepo.getByUserId(list.getUserId()))));
@@ -55,21 +53,21 @@ public class ListController {
     @PutMapping(consumes = "application/json", value = "/{id}")
     ListShortened updateList(@RequestBody ListForm list, @PathVariable Long id) {
         if (!boardRepo.existsById(list.getBoardId()))
-            throw new BoardNotFoundException(list.getBoardId());
+            throw new NotFoundException("admin", list.getBoardId());
         Optional<ListEntity> existingList = listRepo.findById(id);
         if (existingList.isPresent()) {
             ListEntity updatedList = existingList.get();
             updatedList.setName(list.getListTitle());
             return ListService.convertToListShortened(listRepo.save(updatedList));
         } else {
-            throw new ListNotFoundException(id);
+            throw new NotFoundException("list", id);
         }
     }
 
     @DeleteMapping(consumes = "application/json", value = "/{id}")
     Boolean deleteList(@RequestBody ListForm list, @PathVariable Long id) {
         if (!boardRepo.existsById(list.getBoardId()))
-            throw new BoardNotFoundException(list.getBoardId());
+            throw new NotFoundException("board", list.getBoardId());
         listRepo.deleteById(id);
         return true;
     }

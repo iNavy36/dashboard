@@ -14,9 +14,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.example.dashboard.database.AdminRepository;
 import com.example.dashboard.database.BoardRepository;
-import com.example.dashboard.database.BoardService;
-import com.example.dashboard.exceptions.AdminNotExistingException;
-import com.example.dashboard.exceptions.BoardNotFoundException;
+import com.example.dashboard.services.BoardService;
+import com.example.dashboard.exceptions.NotFoundException;
 import com.example.dashboard.model.Board;
 import com.example.dashboard.query_interfaces.BoardShortened;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -40,14 +39,14 @@ public class BoardController {
     @GetMapping("/{id}")
     BoardShortened one(@PathVariable Long id) {
         return BoardService.getSingleBoard(this.boardRepo.getSingleBoard(id))
-                .orElseThrow(() -> new BoardNotFoundException(id));
+                .orElseThrow(() -> new NotFoundException("board", id));
     }
 
     @PostMapping(consumes = "application/json")
     BoardShortened newBoard(@RequestBody BoardForm board) {
         System.out.println("----" + board.getBoardTitle() + "----" + board.getUserId() + "----");
         if (!adminRepo.existsByUserId(board.getUserId()))
-            throw new AdminNotExistingException(board.getUserId());
+            throw new NotFoundException("admin", board.getUserId(), "No admin with user ID");
         return BoardService.convertToBoardShortened(
                 boardRepo.save(new Board(board.getBoardTitle(), adminRepo.getByUserId(board.getUserId()))));
     }
@@ -55,21 +54,21 @@ public class BoardController {
     @PutMapping(consumes = "application/json", value = "/{id}")
     BoardShortened updateBoard(@RequestBody BoardForm board, @PathVariable Long id) {
         if (!adminRepo.existsByUserId(board.getUserId()))
-            throw new AdminNotExistingException(board.getUserId());
+            throw new NotFoundException("admin", board.getUserId(), "No admin with user ID");
         Optional<Board> existingBoard = boardRepo.findById(id);
         if (existingBoard.isPresent()) {
             Board updatedBoard = existingBoard.get();
             updatedBoard.setName(board.getBoardTitle());
             return BoardService.convertToBoardShortened(boardRepo.save(updatedBoard));
         } else {
-            throw new BoardNotFoundException(id);
+            throw new NotFoundException("board", id);
         }
     }
 
     @DeleteMapping(consumes = "application/json", value = "/{id}")
     Boolean deleteBoard(@RequestBody BoardForm board, @PathVariable Long id) {
         if (!adminRepo.existsByUserId(board.getUserId()))
-            throw new AdminNotExistingException(board.getUserId());
+            throw new NotFoundException("admin", board.getUserId(), "No admin with user ID");
         boardRepo.deleteById(id);
         return true;
     }

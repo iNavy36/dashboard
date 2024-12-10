@@ -12,12 +12,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.dashboard.database.CardRepository;
-import com.example.dashboard.database.CardService;
 import com.example.dashboard.database.ListRepository;
 import com.example.dashboard.database.UserRepository;
-import com.example.dashboard.exceptions.CardNotFoundException;
-import com.example.dashboard.exceptions.ListNotFoundException;
-import com.example.dashboard.exceptions.UserNotExistingException;
+import com.example.dashboard.services.CardService;
+import com.example.dashboard.exceptions.NotFoundException;
 import com.example.dashboard.model.Card;
 import com.example.dashboard.query_interfaces.CardShortened;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -38,15 +36,15 @@ public class CardController {
     @GetMapping("/{id}")
     CardShortened one(@PathVariable Long id) {
         return this.cardRepo.getSingleCard(id)
-                .orElseThrow(() -> new CardNotFoundException(id));
+                .orElseThrow(() -> new NotFoundException("card", id));
     }
 
     @PostMapping(consumes = "application/json")
     CardShortened newCard(@RequestBody CardForm card) {
         if (!userRepo.existsById(card.getUserId()))
-            throw new UserNotExistingException(card.getUserId());
+            throw new NotFoundException("user", card.getUserId());
         if (!listRepo.existsById(card.getListId()))
-            throw new ListNotFoundException(card.getListId());
+            throw new NotFoundException("list", card.getListId());
         return CardService.convertToCardShortened(
                 cardRepo.save(new Card(card.getCardContent(), userRepo.getReferenceById(card.getUserId()),
                         listRepo.getReferenceById(card.getListId()))));
@@ -55,41 +53,41 @@ public class CardController {
     @PutMapping(consumes = "application/json", value = "/{id}/content")
     CardShortened updateCardContent(@RequestBody CardForm card, @PathVariable Long id) {
         if (!userRepo.existsById(card.getUserId()))
-            throw new UserNotExistingException(card.getUserId());
+            throw new NotFoundException("user", card.getUserId());
         if (!listRepo.existsById(card.getListId()))
-            throw new ListNotFoundException(card.getListId());
+            throw new NotFoundException("list", card.getListId());
         Optional<Card> existingCard = cardRepo.findById(id);
         if (existingCard.isPresent()) {
             Card updatedCard = existingCard.get();
             updatedCard.setContent(card.getCardContent());
             return CardService.convertToCardShortened(cardRepo.save(updatedCard));
         } else {
-            throw new CardNotFoundException(id);
+            throw new NotFoundException("card", id);
         }
     }
 
     @PutMapping(consumes = "application/json", value = "/{id}/move")
     CardShortened moveCard(@RequestBody CardForm card, @PathVariable Long id) {
         if (!userRepo.existsById(card.getUserId()))
-            throw new UserNotExistingException(card.getUserId());
+            throw new NotFoundException("user", card.getUserId());
         if (!listRepo.existsById(card.getListId()))
-            throw new ListNotFoundException(card.getListId());
+            throw new NotFoundException("list", card.getListId());
         Optional<Card> existingCard = cardRepo.findById(id);
         if (existingCard.isPresent()) {
             Card updatedCard = existingCard.get();
             updatedCard.setListEntity(listRepo.getReferenceById(card.getListId()));
             return CardService.convertToCardShortened(cardRepo.save(updatedCard));
         } else {
-            throw new CardNotFoundException(id);
+            throw new NotFoundException("card", id);
         }
     }
 
     @DeleteMapping(consumes = "application/json", value = "/{id}")
     Boolean deleteCard(@RequestBody CardForm card, @PathVariable Long id) {
         if (!userRepo.existsById(card.getUserId()))
-            throw new UserNotExistingException(card.getUserId());
+            throw new NotFoundException("user", card.getUserId());
         if (!cardRepo.existsById(id))
-            throw new CardNotFoundException(id);
+            throw new NotFoundException("card", id);
         cardRepo.deleteById(id);
         return true;
     }

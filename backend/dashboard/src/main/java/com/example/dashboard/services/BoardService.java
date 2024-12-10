@@ -1,4 +1,4 @@
-package com.example.dashboard.database;
+package com.example.dashboard.services;
 
 import java.util.Collections;
 import java.util.List;

@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.dashboard.database.UserRepository;
-import com.example.dashboard.database.UserService;
+import com.example.dashboard.services.UserService;
 import com.example.dashboard.query_interfaces.UserShortened;
 
 @RestController
