@@ -1,12 +1,12 @@
 import { Component, ViewChild } from '@angular/core';
-import { UserDropdownComponent } from './user-dropdown/user-dropdown.component';
-import { BoardDropdownComponent } from './board-dropdown/board-dropdown.component';
-import { BoardCreatePopupComponent } from './board-popup/board.create-popup.component';
-import { BoardUpdatePopupComponent } from './board-popup/board.update-popup.component';
-import { BoardDeletePopupComponent } from './board-popup/board.delete-popup.component';
-import { ListDisplayComponent } from './list-display/list-display.component';
-import { User } from './user.service';
-import { Board, BoardService } from './board.service';
+import { UserDropdownComponent } from './dropdowns/user-dropdown/user-dropdown.component';
+import { BoardDropdownComponent } from './dropdowns/board-dropdown/board-dropdown.component';
+import { BoardCreatePopupComponent } from './popups/board-popup/create/board.create-popup.component';
+import { BoardUpdatePopupComponent } from './popups/board-popup/update/board.update-popup.component';
+import { BoardDeletePopupComponent } from './popups/board-popup/delete/board.delete-popup.component';
+import { ListDisplayComponent } from './displays/list-display/list-display.component';
+import { User } from './services/user/user.service';
+import { Board, BoardService } from './services/board/board.service';
 
 @Component({
   selector: 'app-root',
